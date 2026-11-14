@@ -511,3 +511,14 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{outline-color:
 .filename-field{display:flex;align-items:stretch;}
 .field .filename-field input:not([type="checkbox"]):not([type="color"]):not([type="range"]){flex:1;min-width:0;border-radius:6px 0 0 6px;}
 .filename-extension{display:flex;align-items:center;padding:0 12px;border:1px solid var(--tapx-border);border-left:0;border-radius:0 6px 6px 0;background:var(--tapx-surface);color:var(--tapx-muted);font-size:11px;}
+
+/* Give the editor's next step and discard action clear button boundaries. */
+.section-next{margin-bottom:12px;}
+.section-next .text-button, #discard-button{min-height:44px;padding:11px 16px;border:1px solid;border-radius:8px;font-size:13px;font-weight:650;line-height:1.4;}
+.section-next .text-button{max-width:100%;background:var(--tapx-navy);border-color:var(--tapx-navy);color:var(--tapx-white);box-shadow:0 3px 8px rgb(6 30 63 / 12%);}
+.section-next .text-button:hover{background:#12345a;border-color:#12345a;color:var(--tapx-white);}
+.section-next .icon, #discard-button .icon{width:18px;height:18px;}
+.editor-footer{flex-wrap:wrap;align-items:center;row-gap:12px;}
+#discard-button{margin-left:auto;background:var(--tapx-white);border-color:var(--tapx-red);color:var(--tapx-red);}
+#discard-button:hover:enabled{background:var(--tapx-soft-red);}
+#discard-button:disabled{opacity:1;background:var(--tapx-surface);border-color:#a9b7c9;color:var(--tapx-muted);}
