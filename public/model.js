@@ -32,6 +32,11 @@ export function applyEditingPolicy(value) {
   if (!card || typeof card !== 'object' || Array.isArray(card)) return card;
   card.tapx = clone(DEFAULT_CARD.tapx);
   card.seo = clone(DEFAULT_CARD.seo);
+  card.wording = clone(DEFAULT_CARD.wording);
+  if (card.bank && typeof card.bank === 'object') card.bank.buttonText = DEFAULT_CARD.bank.buttonText;
+  if (Array.isArray(card.social?.links)) for (const link of card.social.links) {
+    if (link && Object.hasOwn(PLATFORMS, link.platform)) link.label = PLATFORMS[link.platform];
+  }
   return card;
 }
 export function makeVCard(c) {
@@ -41,7 +46,7 @@ export function makeVCard(c) {
   if (c.mobile.enabled) lines.push('TEL;TYPE=CELL,VOICE:' + phone(c.mobile.number));
   if (c.fax.enabled) lines.push('TEL;TYPE=FAX:' + phone(c.fax.number));
   if (c.email.enabled && !c.email.demo) lines.push('EMAIL:' + esc(c.email.address));
-  lines.push('URL:' + esc(c.website.enabled ? safeURL(c.website.url) : c.seo.siteUrl), 'END:VCARD');
+  lines.push('URL:' + esc((c.website.enabled && safeURL(c.website.url)) || c.seo.siteUrl), 'END:VCARD');
   const encoder = new TextEncoder();
   return lines.map(line => {
     let folded = '', bytes = 0;
@@ -75,8 +80,9 @@ export function validateCard(c, { allowIncomplete = false } = {}) {
   text(c.email.address, 'email.address');
   if (!allowIncomplete && c.email.enabled && !c.email.demo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email.address ?? '')) error('email.address', 'Enter a valid email address.');
   for (const key of ['location', 'review']) { text(c[key].url, key + '.url'); text(c[key].text, key + '.text'); if (c[key].enabled && !c[key].demo) url(c[key].url, key + '.url'); }
-  bool(c.website.enabled, 'website.enabled'); text(c.website.url, 'website.url'); if (c.website.enabled) url(c.website.url, 'website.url');
+  bool(c.website.enabled, 'website.enabled'); text(c.website.url, 'website.url'); if (c.social.enabled && c.website.enabled) url(c.website.url, 'website.url');
   bool(c.bank.enabled, 'bank.enabled'); bool(c.bank.demo, 'bank.demo'); text(c.bank.buttonText, 'bank.buttonText');
+  if (c.bank.buttonText !== DEFAULT_CARD.bank.buttonText) error('bank.buttonText', 'The Bank Details button name is fixed.');
   if (c.bank.enabled) { required(c.bank.buttonText, 'bank.buttonText', 'a bank button label'); if (!allowIncomplete && !c.bank.accounts?.length) error('bank.accounts', 'Add at least one account, or hide bank details.'); }
   for (const [i, account] of list(c.bank.accounts, 'bank.accounts', 8).entries()) {
     if (!object(account)) { error('bank.accounts.' + i, 'Invalid bank account.'); continue; }
@@ -92,6 +98,7 @@ export function validateCard(c, { allowIncomplete = false } = {}) {
     if (!object(link)) { error('social.links.' + i, 'Invalid social link.'); continue; }
     for (const key of ['platform', 'label', 'url']) text(link[key], 'social.links.' + i + '.' + key);
     if (!Object.hasOwn(PLATFORMS, link.platform)) error('social.links.' + i + '.platform', 'Choose a platform.');
+    else if (link.label !== PLATFORMS[link.platform]) error('social.links.' + i + '.label', 'The button name is fixed for this platform.');
     bool(link.enabled, 'social.links.' + i + '.enabled'); bool(link.demo, 'social.links.' + i + '.demo');
     if (c.social.enabled && link.enabled) { required(link.label, 'social.links.' + i + '.label', 'a link label'); if (!link.demo) url(link.url, 'social.links.' + i + '.url'); }
   }
@@ -102,7 +109,7 @@ export function validateCard(c, { allowIncomplete = false } = {}) {
     if (!Array.isArray(interval) || interval.length !== 2 || interval.some(value => typeof value !== 'string' || (!allowIncomplete && !/^([01]\d|2[0-3]):[0-5]\d$/.test(value))) || (!allowIncomplete && interval[0] === interval[1])) error('hours.weekly.' + day + '.' + i + '.0', 'Choose different opening and closing times. Overnight hours are supported.');
   }
   for (const [key, value] of Object.entries(DEFAULT_CARD.design)) if (typeof value === 'boolean') bool(c.design[key], 'design.' + key); else if (!/^#[a-f\d]{6}$/i.test(c.design[key] ?? '')) error('design.' + key, 'Choose a valid colour.');
-  for (const key of Object.keys(DEFAULT_CARD.wording)) text(c.wording[key], 'wording.' + key);
+  for (const [key, value] of Object.entries(DEFAULT_CARD.wording)) if (c.wording[key] !== value) error('wording.' + key, 'Button names and popup text are fixed.');
   if (JSON.stringify(c.tapx) !== JSON.stringify(DEFAULT_CARD.tapx)) error('tapx', 'TapX branding is managed by TapX.');
   if (JSON.stringify(c.seo) !== JSON.stringify(DEFAULT_CARD.seo)) error('seo', 'The public page link and search settings are managed by TapX.');
   return errors;

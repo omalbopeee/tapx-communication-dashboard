@@ -42,7 +42,7 @@ export function getFeatures(config) {
       key: link.platform, enabled: link.enabled && Object.hasOwn(PLATFORMS, link.platform),
       title: link.label, subtitle: link.demo ? "Preview Profile" : "Open Profile", action: link.demo ? "demo" : null, href: publicHttps(link.url),
     })),
-    { key: "website", enabled: config.website?.enabled, title: "Website",
+    { key: "website", enabled: config.social?.enabled && config.website?.enabled, title: "Website",
       subtitle: "Visit Website", href: publicHttps(config.website?.url) },
   ];
   return features.filter(feature => feature.enabled && feature.title?.trim() && feature.subtitle?.trim()

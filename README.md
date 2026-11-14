@@ -21,11 +21,13 @@ The saved page opens at **http://127.0.0.1:4175/card.html**. Port 4175 keeps thi
 ## Edit
 
 - **Business & logo:** display name, saved-contact name, category, logo upload and contact filename.
-- **Contact & links:** WhatsApp number/message, saved phone, email, fax, website, location and reviews. Feature preview switches preserve the original demo; turn them off and provide actual links to use real actions.
+- **Contact & links:** turn contact buttons on/off and set WhatsApp number/message, saved phone, email, fax, location and review links. Choose **On click** to show the original preview popup or open the real email app/link.
 - **Bank accounts:** add, reorder and remove accounts; edit bank, account holder, account number, branch and optional branch code. The original fictional sample remains marked as a demo by default.
-- **Social media:** add, reorder, hide and edit social profiles, with a choice of preview mode or actual HTTPS links.
+- **Social media & website:** turn the entire popup button on/off, choose the website and profile buttons to show, and set their links or preview actions. Profile names follow the selected platform.
 - **Opening hours:** weekly intervals and time zone. Overnight hours are supported; opening status is off by default, matching the source.
-- **Design & wording:** colours, logo/notice visibility, headings and action labels. Supporting contact text accepts `{name}`, `{phone}` and `{website}`.
+- **Design:** colours and logo/notice visibility.
+
+Button names, supporting text, popup headings, descriptions and notices stay fixed to the original template. Older saved cards and recovered drafts restore that fixed text while retaining business details, accounts, visibility settings and links.
 
 The live preview updates while editing. **Preview** opens a larger mobile/desktop view. **Save changes** stores the page, and **View saved page** opens it. Discard restores the previous save. Reset restores the original demo to the draft; Save changes applies it. Unfinished drafts can be recovered on your next visit. The contact button generates a vCard from the current business details.
 

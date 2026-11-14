@@ -150,9 +150,6 @@ main{max-width:1480px;margin:0px auto;padding:39px 38px 0px;outline:none;}
 .colour-field input{width:24px;height:24px;padding:0px;border:0px;background:none;cursor:pointer;}
 .colour-field input::-webkit-color-swatch-wrapper{padding:0px;}
 .colour-field input::-webkit-color-swatch{border:0px;border-radius:4px;}
-.wording-group{margin-top:24px;padding-top:20px;border-top:1px solid rgb(237, 240, 232);}
-.wording-group:first-of-type{margin-top:0px;padding-top:0px;border:0px;}
-.wording-group h3{font-size:10px;margin-bottom:17px;}
 .error-banner, .recovery-banner{border-radius:8px;padding:13px 17px;font-size:11px;margin-bottom:20px;line-height:1.8;}
 .error-banner{border:1px solid rgb(235, 198, 189);}
 .recovery-banner{display:flex;justify-content:space-between;align-items:center;gap:15px;border:1px solid rgb(224, 212, 174);}
@@ -333,7 +330,6 @@ main{max-width:1480px;margin:0px auto;padding:39px 38px 0px;outline:none;}
   .large-preview-canvas{padding:12px;}
   .large-preview-canvas iframe{height:58dvh;}
   .recovery-banner{align-items:flex-start;flex-direction:column;}
-  .wording-group h3{font-size:12px;}
 }
 @media (max-width: 380px) {
   .form-grid{grid-template-columns:1fr;}
@@ -402,7 +398,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{outline-color:
 .section-number{background:var(--tapx-soft-red);border-color:rgb(246, 207, 213);color:var(--tapx-red);}
 .section-header h2{font-family:var(--font-heading);color:var(--tapx-navy);}
 .small-tag{background:var(--tapx-surface);border-color:var(--tapx-border);color:var(--tapx-muted);}
-.photo-editor, .subsection, .wording-group, .visibility-row{border-color:var(--tapx-border);}
+.photo-editor, .subsection, .visibility-row{border-color:var(--tapx-border);}
 .photo-avatar{background:var(--tapx-surface);border-color:var(--tapx-surface);}
 .photo-placeholder{color:var(--tapx-muted);}
 .text-button{color:var(--tapx-muted);}
@@ -445,7 +441,6 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{outline-color:
 .preset:hover{background:var(--tapx-surface);}
 .preset.active{outline-color:var(--tapx-red);}
 .colour-field{color:var(--tapx-muted);border-color:var(--tapx-border);}
-.wording-group h3{color:var(--tapx-navy);}
 .error-banner{background:var(--tapx-soft-red);border-color:rgb(240, 189, 197);color:rgb(170, 18, 33);}
 .recovery-banner{background:rgb(255, 250, 237);border-color:rgb(236, 213, 164);color:rgb(128, 86, 18);}
 .recovery-banner button{color:rgb(128, 86, 18);}
