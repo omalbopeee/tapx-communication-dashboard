@@ -507,3 +507,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{outline-color:
 /* Fit a full mobile viewport into the compact live-preview frame. */
 .phone-frame{overflow:clip;}
 .phone-frame #live-frame{max-width:none;transform-origin:0 0;}
+
+.filename-field{display:flex;align-items:stretch;}
+.field .filename-field input:not([type="checkbox"]):not([type="color"]):not([type="range"]){flex:1;min-width:0;border-radius:6px 0 0 6px;}
+.filename-extension{display:flex;align-items:center;padding:0 12px;border:1px solid var(--tapx-border);border-left:0;border-radius:0 6px 6px 0;background:var(--tapx-surface);color:var(--tapx-muted);font-size:11px;}

@@ -22,6 +22,7 @@ function field(path, label, { type = 'text', wide = false, help = '', placeholde
   const attributes = `id="${id}" data-path="${path}" ${error ? 'aria-invalid="true"' : ''} aria-describedby="${id}-help ${id}-error" ${required ? 'required' : ''}`;
   let input;
   if (type === 'textarea') input = `<textarea ${attributes} rows="${rows}" placeholder="${e(placeholder)}">${e(get(path))}</textarea>`;
+  else if (type === 'filename') input = `<div class="filename-field"><input ${attributes} type="text" value="${e(get(path).slice(0, -4))}" spellcheck="false" autocapitalize="off"><span class="filename-extension">.vcf</span></div>`;
   else if (options) input = `<select ${attributes}>${Object.entries(options).map(([key, value]) => `<option value="${e(key)}" ${String(get(path)) === key ? 'selected' : ''}>${e(value)}</option>`).join('')}</select>`;
   else input = `<input ${attributes} type="${type}" value="${e(get(path))}" placeholder="${e(placeholder)}" ${type === 'url' || type === 'email' ? 'spellcheck="false"' : ''}>`;
   return `<div class="field ${wide ? 'wide' : ''}"><label for="${id}">${e(label)}${required ? '<span class="required-mark">*</span>' : ''}</label>${input}<small class="field-help" id="${id}-help" ${help ? '' : 'hidden'}>${e(help)}</small><small class="field-error" id="${id}-error" ${error ? '' : 'hidden'}>${e(error?.message)}</small></div>`;
@@ -38,7 +39,7 @@ function businessPanel() {
   const logo = photoURL(draft.logo);
   return `<section class="form-card">${heading('01', 'Business & logo', 'The business your customers connect with.', 'YOUR BUSINESS')}
     <div class="photo-editor"><img class="photo-avatar" src="${e(logo)}" alt="Current business logo"><div class="photo-copy"><strong>Your business logo</strong><p>JPG, PNG or WebP. Up to 10 MB.</p><div class="photo-buttons"><button class="button secondary" type="button" data-command="upload-photo">${icon('upload')}Change logo</button><button class="text-button" type="button" data-command="reset-logo">Use original</button></div></div></div><input type="file" id="photo-file" accept="image/jpeg,image/png,image/webp" hidden>
-    <div class="form-grid">${field('name', 'Saved business name', { required: true })}${field('displayName', 'Display name', { required: true })}${field('category', 'Business category', { wide: true })}${field('logoAlt', 'Logo description', { wide: true })}${field('contactFilename', 'Contact download filename', { wide: true, help: 'For example TapX.vcf. Keep the .vcf extension.' })}</div></section>${nextButton()}`;
+    <div class="form-grid">${field('name', 'Saved business name', { required: true })}${field('displayName', 'Display name', { required: true })}${field('category', 'Business category', { wide: true })}${field('logoAlt', 'Logo description', { wide: true })}${field('contactFilename', 'Contact download filename', { type: 'filename', wide: true, required: true, help: 'Enter the name only. The .vcf extension is fixed.' })}</div></section>${nextButton()}`;
 }
 function featureToggle(path, title, description) { return `<div class="visibility-row"><div><strong>${e(title)}</strong><p>${e(description)}</p></div>${toggle(path, '', title)}</div>`; }
 function clickAction(path, action = 'Open link') { return field(path, 'On click', { options: { true: 'Show preview popup', false: action } }); }
@@ -187,7 +188,7 @@ async function uploadPhoto(file) {
 document.addEventListener('input', event => {
   const input = event.target.closest('[data-path]');
   if (!input || !draft || input.tagName === 'SELECT' || input.type === 'checkbox') return;
-  set(input.dataset.path, input.type === 'range' ? Number(input.value) : input.value);
+  set(input.dataset.path, input.dataset.path === 'contactFilename' ? input.value.replace(/(?:\.vcf)+$/i, '') + '.vcf' : input.type === 'range' ? Number(input.value) : input.value);
   if (input.type === 'color') { $(`#colour-value-${input.dataset.path.split('.')[1]}`).textContent = input.value.toUpperCase(); document.querySelectorAll('.preset.active').forEach(el => el.classList.remove('active')); }
   if (input.getAttribute('aria-invalid') === 'true') { input.removeAttribute('aria-invalid'); const errorEl = document.getElementById(`${input.id}-error`); if (errorEl) errorEl.hidden = true; errors = errors.filter(error => error.path !== input.dataset.path); }
   changed();
@@ -198,6 +199,7 @@ document.addEventListener('change', event => {
   if (input.dataset.day !== undefined) { draft.hours.weekly[Number(input.dataset.day)] = input.checked ? [['08:00', '22:00']] : []; changed({ render: true }); return; }
   if (!input.dataset.path || !draft) return;
   const path = input.dataset.path;
+  if (path === 'contactFilename') input.value = draft.contactFilename.slice(0, -4);
   if (input.type === 'checkbox') { set(path, input.checked); changed({ render: true }); }
   if (input.tagName === 'SELECT') {
     set(path, path.endsWith('.demo') ? input.value === 'true' : input.value);
