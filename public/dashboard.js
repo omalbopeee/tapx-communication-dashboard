@@ -106,6 +106,18 @@ function updateState() {
 }
 function sendPreview(frame) { if (frame?.contentWindow && draft) frame.contentWindow.postMessage({ type: 'tapx:render', card: clone(draft) }, location.origin); }
 function refreshPreviews() { sendPreview($('#live-frame')); if ($('#preview-dialog').open) sendPreview($('#full-frame')); }
+// Keep the same mobile layout as the full preview at every editor width.
+function fitLivePreview() {
+  const frame = $('#live-frame');
+  const phone = frame.parentElement;
+  if (!phone.clientWidth || !phone.clientHeight) return;
+  const viewportWidth = 390;
+  const scale = phone.clientWidth / viewportWidth;
+  frame.style.width = viewportWidth + 'px';
+  frame.style.height = phone.clientHeight / scale + 'px';
+  frame.style.transform = 'scale(' + scale + ')';
+}
+
 function stashDraft() {
   try {
     if (dirty()) localStorage.setItem(DRAFT_KEY, JSON.stringify({ card: draft, revision, updatedAt: new Date().toISOString() }));
@@ -245,6 +257,10 @@ window.addEventListener('message', event => {
   sendPreview(frame);
 });
 for (const frame of [$('#live-frame'), $('#full-frame')]) frame.addEventListener('load', () => sendPreview(frame));
+
+const livePreviewObserver = new ResizeObserver(fitLivePreview);
+livePreviewObserver.observe($('#live-frame').parentElement);
+fitLivePreview();
 
 hydrateIcons(); renderNav();
 function initialise() {

@@ -508,3 +508,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible{outline-color:
 .schedule-interval > button { flex: 0 0 29px; margin-bottom: 6px; }
 .photo-avatar { object-fit: contain; }
 @media (max-width: 380px) { .schedule-interval .form-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Fit a full mobile viewport into the compact live-preview frame. */
+.phone-frame{overflow:clip;}
+.phone-frame #live-frame{max-width:none;transform-origin:0 0;}
