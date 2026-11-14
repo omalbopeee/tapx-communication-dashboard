@@ -1,0 +1,16 @@
+{
+  "name": "tapx-communication-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A standalone visual editor for the TapX Communication demo.",
+  "scripts": {
+    "start": "node scripts/preview.mjs",
+    "preview": "node scripts/preview.mjs --built",
+    "build": "node scripts/build-pages.mjs",
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
